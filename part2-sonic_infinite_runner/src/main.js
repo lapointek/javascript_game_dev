@@ -15,6 +15,17 @@ k.loadSprite("sonic", "graphics/sonic.png", {
     jump: { from: 8, to: 15, loop: true, speed: 100 },
   },
 });
+k.loadSprite("ring", "graphics/ring.png", {
+  // how many frames per row
+  sliceX: 16,
+  // how many frames per column
+  sliceY: 1,
+  // config animations starting at zero
+  anims: {
+    // first row
+    run: { from: 0, to: 15, loop: true, speed: 30 },
+  },
+});
 k.loadSprite("motobug", "graphics/motobug.png", {
   // how many frames per row
   sliceX: 8,
