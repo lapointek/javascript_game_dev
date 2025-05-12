@@ -28,9 +28,9 @@ k.loadSprite("ring", "graphics/ring.png", {
 });
 k.loadSprite("motobug", "graphics/motobug.png", {
   // how many frames per row
-  sliceX: 8,
+  sliceX: 5,
   // how many frames per column
-  sliceY: 2,
+  sliceY: 1,
   // config animations starting at zero
   anims: {
     // first row
