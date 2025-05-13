@@ -77,6 +77,10 @@ export default function game() {
     };
     spawnMotoBug();
 
+    const spawnRing = () => {
+        // const ring =
+    };
+
     // add collision box on platform
     k.add([
         k.rect(1920, 300),
@@ -93,7 +97,10 @@ export default function game() {
             bgPieces.push(bgPieces.shift());
         }
         bgPieces[0].move(-100, 0);
-        bgPieces[1].moveTo(bgPieces[0].pos.x, -sonic.pos.y / 10 - 50);
+        bgPieces[1].moveTo(bgPieces[0].pos.x + bgPieceWidth * 2, 0);
+
+        bgPieces[0].moveTo(bgPieces[0].pos.x, -sonic.pos.y / 10 - 50);
+        bgPieces[1].moveTo(bgPieces[1].pos.x, -sonic.pos.y / 10 - 50);
 
         // move platform
         if (platforms[1].pos.x < 0) {
