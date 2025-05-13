@@ -1,4 +1,5 @@
 import k from "../kaplayCtx";
+import { makeSonic } from "../entities/sonic";
 
 export default function mainMenu() {
     // if best-score doesnt exist than create best-score set to zero
@@ -33,6 +34,7 @@ export default function mainMenu() {
         ]),
     ];
 
+    makeSonic(k.vec2(200, 745));
     k.onUpdate(() => {
         if (bgPieces[1].pos.x < 0) {
             bgPieces[0].moveTo(bgPieces[1].pos.x + bgPieceWidth * 2, 0);
