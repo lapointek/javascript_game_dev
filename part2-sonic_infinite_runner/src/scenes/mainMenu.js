@@ -34,7 +34,23 @@ export default function mainMenu() {
         ]),
     ];
 
+    // add title
+    k.add([
+        k.text("SONIC RING RUN", { font: "mania", size: 96 }),
+        k.pos(k.center().x, 200),
+        k.anchor("center"),
+    ]);
+    // add subtitle
+    k.add([
+        k.text("Press Space/Click/Touch to Play", { font: "mania", size: 38 }),
+        k.pos(k.center().x, k.center().y, -200),
+        k.anchor("center"),
+    ]);
+
+    // add sonic sprite
     makeSonic(k.vec2(200, 745));
+
+    // move bgPiece
     k.onUpdate(() => {
         if (bgPieces[1].pos.x < 0) {
             bgPieces[0].moveTo(bgPieces[1].pos.x + bgPieceWidth * 2, 0);
