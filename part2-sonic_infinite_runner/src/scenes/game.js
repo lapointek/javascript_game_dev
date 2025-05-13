@@ -1,3 +1,4 @@
+import { makeMotobug } from "../entities/motobug";
 import { makeSonic } from "../entities/sonic";
 import k from "../kaplayCtx";
 
@@ -32,12 +33,49 @@ export default function game() {
     const sonic = makeSonic(k.vec2(200, 745));
     sonic.setControls();
     sonic.setEvents();
+    // collide with sprite that has enemy as a tag, and destroy the enemy sprite
+    sonic.onCollide("enemy", (enemy) => {
+        if (!sonic.isGrounded()) {
+            k.play("destroy", { volume: 0.5 });
+            k.play("hyper-ring", { volume: 0.5 });
+            k.destroy(enemy);
+            // play jump animation
+            sonic.play("jump");
+            // make sonic jump
+            sonic.jump();
+            return;
+        }
+        k.play("hurt", { volume: 0.5 });
+        // TODO
+        k.go("gameover");
+    });
 
     // increase speed of platform sprite
     let gameSpeed = 300;
     k.loop(1, () => {
         gameSpeed += 50;
     });
+
+    const spawnMotoBug = () => {
+        const motobug = makeMotobug(k.vec2(1950, 773));
+        // on update loop for motobug
+        motobug.onUpdate(() => {
+            if (gameSpeed < 3000) {
+                motobug.move(-(gameSpeed + 300), 0);
+                return;
+            }
+            // motobug moves at same game speed as platform
+            motobug.move(-gameSpeed, 0);
+        });
+        // destroy motoBug when offscreen to the left
+        motobug.onExitScreen(() => {
+            if (motobug.pos.x < 0) k.destroy(motobug);
+        });
+        // spawn motobug after a certain random time
+        const waitTime = k.rand(0.5, 2.5);
+        k.wait(waitTime, spawnMotoBug);
+    };
+    spawnMotoBug();
 
     // add collision box on platform
     k.add([
