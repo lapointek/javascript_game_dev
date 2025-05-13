@@ -1,4 +1,5 @@
 import k from "./kaplayCtx";
+import game from "./scenes/game";
 import mainMenu from "./scenes/mainMenu";
 
 // import asset
@@ -49,7 +50,7 @@ k.loadSound("city", "sounds/city.wav");
 
 k.scene("main-menu", mainMenu);
 
-k.scene("game", () => {});
+k.scene("game", game);
 k.scene("gameover", () => {});
 
 // default scene
