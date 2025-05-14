@@ -49,9 +49,12 @@ export default function game() {
             sonic.play("jump");
             // make sonic jump
             sonic.jump();
+            scoreMultiplier += 1;
+            score += 10 * scoreMultiplier;
+            scoreText.text = `SCORE: ${score}`;
             return;
         }
-        k.play("hurt", { volume: 0.5 });
+        k.play("hurt", { volume: 0.2 });
         // TODO
         k.go("gameover");
     });
@@ -61,7 +64,7 @@ export default function game() {
         k.play("ring", { volume: 0.2 });
         k.destroy(ring);
         score++;
-        scoreText.text = `SCORE : ${score}`;
+        scoreText.text = `SCORE: ${score}`;
     });
 
     // increase speed of platform sprite
