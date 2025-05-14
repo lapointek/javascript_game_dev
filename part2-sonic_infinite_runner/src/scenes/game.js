@@ -65,6 +65,8 @@ export default function game() {
         k.destroy(ring);
         score++;
         scoreText.text = `SCORE: ${score}`;
+        sonic.ringCollectUI.text = "+1";
+        k.wait(1, () => (sonic.ringCollectUI.text = ""));
     });
 
     // increase speed of platform sprite
@@ -121,6 +123,7 @@ export default function game() {
     ]);
 
     k.onUpdate(() => {
+        if (sonic.isGrounded()) scoreMultiplier = 0;
         // move game object chemical-bg to left
         if (bgPieces[1].pos.x < 0) {
             bgPieces[0].moveTo(bgPieces[1].pos.x + bgPieceWidth * 2, 0);
