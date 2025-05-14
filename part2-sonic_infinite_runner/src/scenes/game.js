@@ -31,9 +31,10 @@ export default function game() {
         k.add([k.sprite("platforms"), k.pos(platformWidth, 450), k.scale(4)]),
     ];
 
-    // score
+    // score text
     let score = 0;
     let scoreMultiplier = 0;
+    const scoreText = k.add([k.text("SCORE: 0", { font: "mania" })]);
 
     const sonic = makeSonic(k.vec2(200, 745));
     sonic.setControls();
@@ -55,11 +56,12 @@ export default function game() {
         k.go("gameover");
     });
 
+    // collide with ring
     sonic.onCollide("ring", (ring) => {
         k.play("ring", { volume: 0.2 });
         k.destroy(ring);
         score++;
-        // TODO
+        scoreText.text = `SCORE : ${score}`;
     });
 
     // increase speed of platform sprite
