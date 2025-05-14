@@ -25,7 +25,7 @@ k.loadSprite("ring", "graphics/ring.png", {
     // config animations starting at zero
     anims: {
         // first row
-        run: { from: 0, to: 15, loop: true, speed: 30 },
+        spin: { from: 0, to: 15, loop: true, speed: 30 },
     },
 });
 k.loadSprite("motobug", "graphics/motobug.png", {

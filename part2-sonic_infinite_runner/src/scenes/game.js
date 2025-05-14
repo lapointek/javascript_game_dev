@@ -1,6 +1,7 @@
+import k from "../kaplayCtx";
 import { makeMotobug } from "../entities/motobug";
 import { makeSonic } from "../entities/sonic";
-import k from "../kaplayCtx";
+import { makeRing } from "../entities/ring";
 
 export default function game() {
     // set gravity in game
@@ -36,8 +37,8 @@ export default function game() {
     // collide with sprite that has enemy as a tag, and destroy the enemy sprite
     sonic.onCollide("enemy", (enemy) => {
         if (!sonic.isGrounded()) {
-            k.play("destroy", { volume: 0.5 });
-            k.play("hyper-ring", { volume: 0.5 });
+            k.play("destroy", { volume: 0.2 });
+            k.play("hyper-ring", { volume: 0.2 });
             k.destroy(enemy);
             // play jump animation
             sonic.play("jump");
@@ -77,9 +78,21 @@ export default function game() {
     };
     spawnMotoBug();
 
+    // spawn ring
     const spawnRing = () => {
-        // const ring =
+        const ring = makeRing(k.vec2(1950, 745));
+        ring.onUpdate(() => {
+            ring.move(-gameSpeed, 0);
+        });
+        // destroy ring off screen
+        ring.onExitScreen(() => {
+            if (ring.pos.x < 0) k.destroy(ring);
+        });
+        // spawnRing randomly
+        const waitTime = k.rand(0.5, 3);
+        k.wait(waitTime, spawnRing);
     };
+    spawnRing();
 
     // add collision box on platform
     k.add([

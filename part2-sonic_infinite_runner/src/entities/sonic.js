@@ -7,7 +7,7 @@ export function makeSonic(pos) {
         k.area(),
         k.anchor("center"),
         k.pos(pos),
-        k.body({ jumpForce: 1700 }),
+        k.body({ jumpForce: 1500 }),
         {
             setControls() {
                 // on button press sprite jump
@@ -17,7 +17,7 @@ export function makeSonic(pos) {
                         this.play("jump");
                         this.jump();
                         // play a sound
-                        k.play("jump", { volume: 0.5 });
+                        k.play("jump", { volume: 0.2 });
                     }
                 });
             },
