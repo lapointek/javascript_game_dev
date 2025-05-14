@@ -6,7 +6,7 @@ import { makeRing } from "../entities/ring";
 export default function game() {
     // set gravity in game
     k.setGravity(3100);
-    const citySfx = k.play("city", { volume: 0.2, loop: true });
+    const citySfx = k.play("city", { volume: 0.02, loop: true });
 
     const bgPieceWidth = 1920;
     const bgPieces = [
@@ -53,8 +53,9 @@ export default function game() {
             scoreMultiplier += 1;
             score += 10 * scoreMultiplier;
             scoreText.text = `SCORE: ${score}`;
-            // if scoreMultiplier is 1 display +10 text. if scoreMultiplier is > 1 display scoreMultipler.
-            if (scoreMultiplier === 1) sonic.ringCollectUI.text = "+10";
+            // if scoreMultiplier is 1, display +10 text. if scoreMultiplier is > 1, display scoreMultipler.
+            if (scoreMultiplier === 1)
+                sonic.ringCollectUI.text = `+${10 * scoreMultiplier}`;
             if (scoreMultiplier > 1)
                 sonic.ringCollectUI.text = `x${scoreMultiplier}`;
             // display text for 1 second
@@ -79,7 +80,7 @@ export default function game() {
         k.wait(1, () => (sonic.ringCollectUI.text = ""));
     });
 
-    // increase speed of platform sprite
+    // loop and slowly increase speed of platform sprite
     let gameSpeed = 300;
     k.loop(1, () => {
         gameSpeed += 50;
@@ -132,6 +133,7 @@ export default function game() {
         k.body({ isStatic: true }),
     ]);
 
+    // create background, move background and platform
     k.onUpdate(() => {
         if (sonic.isGrounded()) scoreMultiplier = 0;
         // move game object chemical-bg to left

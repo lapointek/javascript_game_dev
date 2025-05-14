@@ -1,5 +1,6 @@
 import k from "./kaplayCtx";
 import game from "./scenes/game";
+import gameOver from "./scenes/gameOver";
 import mainMenu from "./scenes/mainMenu";
 
 // import asset
@@ -46,12 +47,12 @@ k.loadSound("hurt", "sounds/Hurt.wav");
 k.loadSound("hyper-ring", "sounds/HyperRing.wav");
 k.loadSound("jump", "sounds/Jump.wav");
 k.loadSound("ring", "sounds/Ring.wav");
-k.loadSound("city", "sounds/city.wav");
+k.loadSound("city", "sounds/city.mp3");
 
 k.scene("main-menu", mainMenu);
 
 k.scene("game", game);
-k.scene("gameover", () => {});
+k.scene("gameover", gameOver);
 
 // default scene
 k.go("main-menu");

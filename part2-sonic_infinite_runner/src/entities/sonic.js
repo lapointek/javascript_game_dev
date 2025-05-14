@@ -7,7 +7,7 @@ export function makeSonic(pos) {
         k.area(),
         k.anchor("center"),
         k.pos(pos),
-        k.body({ jumpForce: 1500 }),
+        k.body({ jumpForce: 1700 }),
         {
             setControls() {
                 // on button press sprite jump

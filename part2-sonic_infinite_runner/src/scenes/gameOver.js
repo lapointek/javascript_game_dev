@@ -54,4 +54,30 @@ export default function gameOver(citySfx) {
         k.text(bestRank, { font: "mani", size: 100 }),
         k.anchor("center"),
     ]);
+
+    const currentRankBox = k.add([
+        k.rect(400, 400, { radius: 4 }),
+        k.color(0, 0, 0),
+        k.area(),
+        k.anchor("center"),
+        k.outline(6, k.Color.fromArray([255, 255, 255])),
+        k.pos(k.center().x + 400, k.center().y + 50),
+    ]);
+    currentRankBox.add([
+        k.text(currentRank, { font: "mani", size: 100 }),
+        k.anchor("center"),
+    ]);
+
+    // resart game
+    k.wait(1, () => {
+        k.add([
+            k.text("Press Space/Click/Touch to Play Again", {
+                font: "mania",
+                size: 64,
+            }),
+            k.anchor("center"),
+            k.pos(k.center().x, k.center().y + 350),
+        ]);
+        k.onButtonPress("jump", () => k.go("game"));
+    });
 }
