@@ -31,6 +31,10 @@ export default function game() {
         k.add([k.sprite("platforms"), k.pos(platformWidth, 450), k.scale(4)]),
     ];
 
+    // score
+    let score = 0;
+    let scoreMultiplier = 0;
+
     const sonic = makeSonic(k.vec2(200, 745));
     sonic.setControls();
     sonic.setEvents();
@@ -51,12 +55,20 @@ export default function game() {
         k.go("gameover");
     });
 
+    sonic.onCollide("ring", (ring) => {
+        k.play("ring", { volume: 0.2 });
+        k.destroy(ring);
+        score++;
+        // TODO
+    });
+
     // increase speed of platform sprite
     let gameSpeed = 300;
     k.loop(1, () => {
         gameSpeed += 50;
     });
 
+    // spawn motobug
     const spawnMotoBug = () => {
         const motobug = makeMotobug(k.vec2(1950, 773));
         // on update loop for motobug
