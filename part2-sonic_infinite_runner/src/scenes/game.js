@@ -67,7 +67,7 @@ export default function game() {
 
         k.play("hurt", { volume: 0.2 });
         k.setData("current-score", score);
-        k.go("gameover", { citySfx: citySfx });
+        k.go("gameover", citySfx);
     });
 
     // collide with ring
