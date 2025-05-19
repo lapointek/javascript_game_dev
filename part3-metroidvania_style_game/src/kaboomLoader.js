@@ -7,6 +7,7 @@ export const k = kaboom({
     width: 640 * scale,
     height: 360 * scale,
     scale,
+    // maintain aspect ratio
     letterbox: true,
     global: false,
 });
