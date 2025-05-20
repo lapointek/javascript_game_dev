@@ -38,7 +38,7 @@ export function setMapColliders(k, map, colliders) {
         map.add([
             k.pos(collider.x, collider.y),
             k.area({
-                shape: new k.rect(k.vec2(0), collider.width, collider.height),
+                shape: new k.Rect(k.vec2(0), collider.width, collider.height),
                 collisionIgnore: ["collider"],
             }),
             // body act as a wall
