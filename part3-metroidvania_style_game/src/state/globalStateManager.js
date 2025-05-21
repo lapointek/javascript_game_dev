@@ -24,3 +24,5 @@ function initStateManager() {
         },
     };
 }
+
+export const state = initStateManager();

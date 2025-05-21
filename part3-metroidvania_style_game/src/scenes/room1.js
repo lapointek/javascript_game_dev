@@ -1,5 +1,9 @@
 import { makePlayer } from "../entities/player.js";
-import { setBackgroundColor, setMapColliders } from "./roomUtils.js";
+import {
+    setBackgroundColor,
+    setMapColliders,
+    setCameraZones,
+} from "./roomUtils.js";
 
 export function room1(k, roomData) {
     // color background of canvas
@@ -16,6 +20,11 @@ export function room1(k, roomData) {
     const colliders = [];
     const positions = [];
     const cameras = [];
+
+    setMapColliders(k, map, colliders);
+    setCameraZones(k, map, cameras);
+    const player = map.add(makePlayer(k));
+
     for (const layer of roomLayers) {
         if (layer.name === "cameras") {
             cameras.push(...layer.objects);
@@ -32,6 +41,13 @@ export function room1(k, roomData) {
             break;
         }
     }
-    setMapColliders(k, map, colliders);
-    const player = map.add(makePlayer(k));
+
+    for (const position of positions) {
+        if (position.name === "player") {
+            player.setPosition(position.x, position.y);
+            player.setControls();
+            player.setEvents();
+            player.enablePassthrough();
+        }
+    }
 }

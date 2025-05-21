@@ -54,7 +54,7 @@ export function setCameraControls(k, player, map, roomData) {}
 
 // Camera
 export function setCameraZones(k, map, cameras) {
-    for (const camera of camera) {
+    for (const camera of cameras) {
         const cameraZone = map.add([
             k.area({
                 shape: new k.Rect(k.vec2(0), camera.width, camera.height),

@@ -1,3 +1,5 @@
+import { state } from "../state/globalStateManager.js";
+
 export function makePlayer(k) {
     // create gameobject player
     return k.make([
@@ -10,7 +12,7 @@ export function makePlayer(k) {
         // position
         k.anchor("center"),
         k.body({ mass: 100, jumpForce: 320 }),
-        k.doubleJump(),
+        k.doubleJump(state.current()),
         {},
     ]);
 }
