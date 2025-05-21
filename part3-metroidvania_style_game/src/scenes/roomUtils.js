@@ -48,3 +48,35 @@ export function setMapColliders(k, map, colliders) {
         ]);
     }
 }
+
+// Camera
+export function setCameraControls(k, player, map, roomData) {}
+
+// Camera
+export function setCameraZones(k, map, cameras) {
+    for (const camera of camera) {
+        const cameraZone = map.add([
+            k.area({
+                shape: new k.Rect(k.vec2(0), camera.width, camera.height),
+                collisionIgnore: ["collider"],
+            }),
+            k.pos(camera.x, camera.y),
+        ]);
+        // on collision of a game object
+        cameraZone.onCollide("player", () => {
+            if (k.camPos().x !== camera.properties[0].value) {
+                // change value of something
+                k.tween(
+                    k.camPos().y,
+                    // value in json
+                    camera.properties[0].value,
+                    // transition
+                    0.8,
+                    // function
+                    (val) => k.camPos(k.camPos().x, val),
+                    k.easings.linear
+                );
+            }
+        });
+    }
+}
