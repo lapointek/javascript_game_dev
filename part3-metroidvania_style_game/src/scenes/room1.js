@@ -1,9 +1,5 @@
 import { makePlayer } from "../entities/player.js";
-import {
-    setBackgroundColor,
-    setMapColliders,
-    setCameraZones,
-} from "./roomUtils.js";
+import { setBackgroundColor, setMapColliders, setCameraZones } from "./roomUtils.js";
 
 export function room1(k, roomData) {
     // color background of canvas
@@ -46,8 +42,8 @@ export function room1(k, roomData) {
         if (position.name === "player") {
             player.setPosition(position.x, position.y);
             player.setControls();
-            // player.setEvents();
-            // player.enablePassthrough();
+            player.setEvents();
+            player.enablePassthrough();
         }
     }
 }

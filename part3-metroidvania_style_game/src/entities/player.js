@@ -35,11 +35,7 @@ export function makePlayer(k) {
                             if (this.curAnim() !== "jump") this.play("jump");
                             this.doubleJump();
                         }
-                        if (
-                            key === "z" &&
-                            this.curAnim() !== "attack" &&
-                            this.isGrounded()
-                        ) {
+                        if (key === "z" && this.curAnim() !== "attack" && this.isGrounded()) {
                             this.isAttacking = true;
                             // hit box
                             this.add([
@@ -99,12 +95,7 @@ export function makePlayer(k) {
                 this.controlHandlers.push(
                     k.onKeyRelease(() => {
                         // if none of these animations are not playing then play idle animation
-                        if (
-                            this.curAnim() !== "idle" &&
-                            this.curAnim() !== "jump" &&
-                            this.curAnim() !== "fall" &&
-                            this.curAnim() !== "attack"
-                        )
+                        if (this.curAnim() !== "idle" && this.curAnim() !== "jump" && this.curAnim() !== "fall" && this.curAnim() !== "attack")
                             this.play("idle");
                     })
                 );

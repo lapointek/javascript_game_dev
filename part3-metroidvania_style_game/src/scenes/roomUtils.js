@@ -1,3 +1,5 @@
+import { state } from "../state/globalStateManager.js";
+
 export function setBackgroundColor(k, hexColorCode) {
     k.add([
         // create rectangle
@@ -50,7 +52,23 @@ export function setMapColliders(k, map, colliders) {
 }
 
 // Camera
-export function setCameraControls(k, player, map, roomData) {}
+export function setCameraControls(k, player, map, roomData) {
+    k.onUpdate(() => {
+        // if player is in boss fight return
+        if (state.current().playerInBossFight) return;
+
+        // if map position is greater than players position than clamp camera position to bounds of map
+        if (map.pos.x + 160 > player.pos.x) {
+            k.camPos(map.pos.x + 160, k.camPos().y);
+            return;
+        }
+
+        if (player.pos.x > map.pos.x + roomData.width * roomData.tilewidth - 160) {
+            k.camPos(map.pos.x + roomData.width * roomData.tilewidth - 160, k.camPos().y);
+            return;
+        }
+    });
+}
 
 // Camera
 export function setCameraZones(k, map, cameras) {
