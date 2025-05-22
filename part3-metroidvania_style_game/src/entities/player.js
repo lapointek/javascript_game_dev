@@ -25,6 +25,13 @@ export function makePlayer(k) {
                 this.pos.x = x;
                 this.pos.y = y;
             },
+            enablePassthrough() {
+                this.onBeforePhysicsResolve((collision) => {
+                    if (collision.target.is("passthrough") && this.isJumping()) {
+                        collision.preventResolution();
+                    }
+                });
+            },
             // player controls
             setControls() {
                 this.controlHandlers = [];
@@ -95,10 +102,30 @@ export function makePlayer(k) {
                 this.controlHandlers.push(
                     k.onKeyRelease(() => {
                         // if none of these animations are not playing then play idle animation
-                        if (this.curAnim() !== "idle" && this.curAnim() !== "jump" && this.curAnim() !== "fall" && this.curAnim() !== "attack")
+                        if (
+                            this.curAnim() !== "idle" &&
+                            this.curAnim() !== "jump" &&
+                            this.curAnim() !== "fall" &&
+                            this.curAnim() !== "attack"
+                        )
                             this.play("idle");
                     })
                 );
+            },
+            setEvents() {
+                this.onFall(() => {
+                    this.play("fall");
+                });
+                // falling off platform
+                this.onFallOff(() => {
+                    this.play("fall");
+                });
+                this.onGround(() => {
+                    this.play("idle");
+                });
+                this.onHeadbutt(() => {
+                    this.play("fall");
+                });
             },
         },
     ]);

@@ -67,6 +67,8 @@ export function setCameraControls(k, player, map, roomData) {
             k.camPos(map.pos.x + roomData.width * roomData.tilewidth - 160, k.camPos().y);
             return;
         }
+        // camera follow player on x axis and not y axis
+        k.camPos(player.pos.x, k.camPos().y);
     });
 }
 
