@@ -1,9 +1,9 @@
 import { state } from "../state/globalStateManager.js";
 
-export function makePlayer(k, initialPos) {
+export function makePlayer(k) {
     // create gameobject player
     return k.make([
-        k.pos(initialPos),
+        k.pos(),
         k.sprite("player"),
         // hit box
         k.area({
@@ -21,6 +21,10 @@ export function makePlayer(k, initialPos) {
         {
             speed: 150,
             isAttacking: false,
+            setPosition(x, y) {
+                this.pos.x = x;
+                this.pos.y = y;
+            },
             // player controls
             setControls() {
                 this.controlHandlers = [];
@@ -46,8 +50,9 @@ export function makePlayer(k, initialPos) {
                                 "sword-hitbox",
                             ]);
                             this.play("attack");
+
                             // animation name
-                            this.onAimEnd((anime) => {
+                            this.onAnimEnd((anim) => {
                                 // if animation is attack
                                 if (anim === "attack") {
                                     // get swordHitBox
@@ -88,6 +93,19 @@ export function makePlayer(k, initialPos) {
                             this.move(this.speed, 0);
                             return;
                         }
+                    })
+                );
+
+                this.controlHandlers.push(
+                    k.onKeyRelease(() => {
+                        // if none of these animations are not playing then play idle animation
+                        if (
+                            this.curAnim() !== "idle" &&
+                            this.curAnim() !== "jump" &&
+                            this.curAnim() !== "fall" &&
+                            this.curAnim() !== "attack"
+                        )
+                            this.play("idle");
                     })
                 );
             },

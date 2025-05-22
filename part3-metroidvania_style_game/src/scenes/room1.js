@@ -21,16 +21,13 @@ export function room1(k, roomData) {
     const positions = [];
     const cameras = [];
 
-    setMapColliders(k, map, colliders);
-    setCameraZones(k, map, cameras);
-    const player = map.add(makePlayer(k));
-
     for (const layer of roomLayers) {
         if (layer.name === "cameras") {
             cameras.push(...layer.objects);
         }
 
         if (layer.name === "positions") {
+            // spread operator [1,2,3] instead of [[1,2,3]] this
             positions.push(...layer.objects);
             continue;
         }
@@ -38,16 +35,19 @@ export function room1(k, roomData) {
         if (layer.name === "colliders") {
             // pushing all roomdData layers into colliders array
             colliders.push(...layer.objects);
-            break;
         }
     }
+
+    setMapColliders(k, map, colliders);
+    setCameraZones(k, map, cameras);
+    const player = map.add(makePlayer(k));
 
     for (const position of positions) {
         if (position.name === "player") {
             player.setPosition(position.x, position.y);
             player.setControls();
-            player.setEvents();
-            player.enablePassthrough();
+            // player.setEvents();
+            // player.enablePassthrough();
         }
     }
 }
