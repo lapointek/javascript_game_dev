@@ -28,6 +28,7 @@ export function setMapColliders(k, map, colliders) {
                     collisionIgnore: ["collider"],
                 }),
                 // tag name
+                k.body({ isStatic: true }),
                 "collider",
                 collider.type,
             ]);
@@ -64,6 +65,7 @@ export function setCameraControls(k, player, map, roomData) {
         }
 
         if (player.pos.x > map.pos.x + roomData.width * roomData.tilewidth - 160) {
+            // clamp camera to room
             k.camPos(map.pos.x + roomData.width * roomData.tilewidth - 160, k.camPos().y);
             return;
         }
@@ -82,17 +84,17 @@ export function setCameraZones(k, map, cameras) {
             }),
             k.pos(camera.x, camera.y),
         ]);
-        // on collision of a game object
+        // on collision of a game object. EventListener
         cameraZone.onCollide("player", () => {
+            // get current camera position. if x position not equal to properties first element
             if (k.camPos().x !== camera.properties[0].value) {
-                // change value of something
                 k.tween(
                     k.camPos().y,
                     // value in json
                     camera.properties[0].value,
-                    // transition
+                    // transition time
                     0.8,
-                    // function
+                    // function to use new value
                     (val) => k.camPos(k.camPos().x, val),
                     k.easings.linear
                 );

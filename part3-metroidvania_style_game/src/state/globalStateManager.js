@@ -2,7 +2,7 @@ export const statePropsEnum = {
     playerHp: "playerHp",
     isDoubleJumpUnlocked: "isDoubleJumpUnlocked",
     playerIsInBossFight: "playerInBossFight",
-    isBossDefeated: "isBoxxDefeated",
+    isBossDefeated: "isBossDefeated",
 };
 
 // state of game
