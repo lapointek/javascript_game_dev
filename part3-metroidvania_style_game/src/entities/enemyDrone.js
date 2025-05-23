@@ -113,7 +113,7 @@ export function makeDrone(k, initialPos) {
                 this.onExitScreen(() => {
                     // if the drones position distance is greater than 400
                     //  then the drones position equals initial position
-                    if (this.pos.dist(initialPos) > 400) this.pos = initialPos;
+                    this.pos = initialPos;
                 });
             },
         },
