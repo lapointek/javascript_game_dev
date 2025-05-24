@@ -16,43 +16,45 @@ export function makeDrone(k, initialPos) {
             speed: 100,
             pursuitSpeed: 150,
             range: 100,
+
             setBehavior() {
                 const player = k.get("player", { recursive: true })[0];
-                // run once
-                this.onStateEnter("patrol-right", async () => {
+                // run once (right)
+                this.enterState("patrol-right", async () => {
                     // wait until continue running the if statement
                     await k.wait(3);
-                    if (this.state === "patrol-right") this.onStateEnter("patrol-left");
+                    if (this.state === "patrol-right") this.enterState("patrol-left");
                 });
                 // while in patrol-right state run logic every frame.
                 // drone is moving aslong as player is not within range.
                 this.onStateUpdate("patrol-right", () => {
                     // if position of player is less than range of drone then enter alert state
                     if (this.pos.dist(player.pos) < this.range) {
-                        this.onStateEnter("alert");
+                        this.enterState("alert");
                         return;
                     }
                     this.flipX = false;
                     this.move(this.speed, 0);
                 });
 
-                // run once
-                this.onStateEnter("patrol-left", async () => {
+                // run once (left)
+                this.enterState("patrol-left", async () => {
                     // wait until continue running the if statement
                     await k.wait(3);
-                    if (this.state === "patrol-left") this.onStateEnter("patrol-right");
+                    if (this.state === "patrol-left") this.enterState("patrol-right");
                 });
                 // while in patrol-right state run logic every frame.
                 // drone is moving aslong as player is not within range.
                 this.onStateUpdate("patrol-left", () => {
                     // if position of player is less than range of drone then enter alert state
                     if (this.pos.dist(player.pos) < this.range) {
-                        this.onStateEnter("alert");
+                        this.enterState("alert");
                         return;
                     }
                     this.flipX = true;
                     this.move(-this.speed, 0);
                 });
+
                 this.onStateEnter("alert", async () => {
                     await k.wait(1);
                     if (this.pos.dist(player.pos) < this.range) {
@@ -70,7 +72,7 @@ export function makeDrone(k, initialPos) {
                     }
                     this.flipX = player.pos.x <= this.pos.x;
                     // move to player
-                    this.moveTo(k.vec2(player.pos.x, player.pos.y), this.pursuitSpeed);
+                    this.moveTo(k.vec2(player.pos.x, player.pos.y, +12), this.pursuitSpeed);
                 });
             },
 
@@ -111,7 +113,7 @@ export function makeDrone(k, initialPos) {
                 });
 
                 this.onExitScreen(() => {
-                    // if the drones position distance is greater than 400
+                    // if the drones distance is greater than 400
                     //  then the drones position equals initial position
                     this.pos = initialPos;
                 });
