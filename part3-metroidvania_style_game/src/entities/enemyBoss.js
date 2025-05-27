@@ -101,7 +101,9 @@ export function makeBoss(k, initialPos) {
                     this.play("explode");
                     state.set(statePropsEnum.isBossDefeated, true);
                     state.set(statePropsEnum.isDoubleJumpUnlocked, true);
+                    // enable double jump
                     player.enableDoubleJump();
+                    // play sound
                     k.play("notify");
                     const notification = k.add(
                         makeNotificationBox(

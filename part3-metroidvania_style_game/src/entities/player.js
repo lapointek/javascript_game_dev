@@ -43,11 +43,7 @@ export function makePlayer(k) {
                             if (this.curAnim() !== "jump") this.play("jump");
                             this.doubleJump();
                         }
-                        if (
-                            key === "z" &&
-                            this.curAnim() !== "attack" &&
-                            this.isGrounded()
-                        ) {
+                        if (key === "z" && this.curAnim() !== "attack" && this.isGrounded()) {
                             this.isAttacking = true;
                             // hit box
                             this.add([
@@ -170,6 +166,10 @@ export function makePlayer(k) {
                         k.go("room1");
                     }
                 });
+            },
+            // enable double jump on player when you beat the enemy boss
+            enableDoubleJump() {
+                this.numJumps = 2;
             },
         },
     ]);
