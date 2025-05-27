@@ -1,5 +1,6 @@
 export function makeNotificationBox(k, content) {
     const container = k.make([
+        // create notification
         k.rect(480, 100),
         k.color(k.Color.fromHex("#20214a")),
         k.fixed(),
@@ -12,6 +13,7 @@ export function makeNotificationBox(k, content) {
             },
         },
     ]);
+    // text component
     container.add([
         k.text(content, {
             font: "glyphmesss",
