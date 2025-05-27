@@ -36,6 +36,8 @@ export function makeBoss(k, initialPos) {
                 });
                 // boss enemy attack
                 this.onStateEnter("fire", () => {
+                    // play fire animation
+                    if (this.curAnim() !== "fire") this.play("fire");
                     const flamethrowerSound = k.play("flamethrower");
                     const fireHitbox = this.add([
                         k.area({
@@ -47,12 +49,52 @@ export function makeBoss(k, initialPos) {
                     // on collide with player
                     fireHitbox.onCollide("player", () => {
                         player.hurt(1);
+                        // if player is dead
                         if (player.hp() === 0)
                             state.set(statePropsEnum.playerIsInBossFight, false);
                     });
+                    // stop fire sound
+                    k.wait(this.fireDuration, () => {
+                        flamethrowerSound.stop();
+                        this.enterState("shut-fire");
+                    });
+                });
+                // play hitbox fire animation when enemy boss is hit and then destroy animation
+                this.onStateEnd("fire", () => {
+                    const fireHitbox = k.get("fire-hitbox", { recursive: true })[0];
+                    if (fireHitbox) k.destroy(fireHitbox);
+                });
+                // play fire animation if not already playing
+                // this.onStateUpdate("fire", () => {
+                //     if (this.curAnim() !== "fire") this.play("fire");
+                // });
+
+                // play shut fire animation
+                this.onStateEnter("shut-fire", () => {
+                    this.play("shut-fire");
                 });
             },
-            setEvents() {},
+            setEvents() {
+                const player = k.get("player", { recursive: true })[0];
+                this.onCollide("sword-hitbox", () => {
+                    k.play("boom");
+                    this.hurt(1);
+                });
+                this.onAnimEnd((anim) => {
+                    switch (anim) {
+                        case "open-fire":
+                            this.enterState("fire");
+                            break;
+                        case "shut-fire":
+                            this.enterState("follow");
+                            break;
+                        case "explode":
+                            k.destroy("this");
+                            break;
+                        default:
+                    }
+                });
+            },
         },
     ]);
 }
