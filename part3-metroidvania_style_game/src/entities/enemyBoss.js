@@ -50,8 +50,7 @@ export function makeBoss(k, initialPos) {
                     fireHitbox.onCollide("player", () => {
                         player.hurt(1);
                         // if player is dead
-                        if (player.hp() === 0)
-                            state.set(statePropsEnum.playerIsInBossFight, false);
+                        if (player.hp() === 0) state.set(statePropsEnum.playerIsInBossFight, false);
                     });
                     // stop fire sound
                     k.wait(this.fireDuration, () => {
@@ -94,25 +93,24 @@ export function makeBoss(k, initialPos) {
                         default:
                     }
                 });
-                this.on("explode"),
-                    () => {
-                        this.enterState("explode");
-                        this.collisionIgnore = ["player"];
-                        this.unuse("body");
-                        k.play("boom");
-                        this.play("explode");
-                        state.set(statePropsEnum.isBossDefeated, true);
-                        state.set(statePropsEnum.isDoubleJumpUnlocked, true);
-                        player.enableDoubleJump();
-                        k.play("notify");
-                        const notification = k.add(
-                            makeNotificationBox(
-                                k,
-                                "You unlocked a new ability! \nYou can now double jump."
-                            )
-                        );
-                        k.wait(3, () => notification.close());
-                    };
+                this.on("explode", () => {
+                    this.enterState("explode");
+                    this.collisionIgnore = ["player"];
+                    this.unuse("body");
+                    k.play("boom");
+                    this.play("explode");
+                    state.set(statePropsEnum.isBossDefeated, true);
+                    state.set(statePropsEnum.isDoubleJumpUnlocked, true);
+                    player.enableDoubleJump();
+                    k.play("notify");
+                    const notification = k.add(
+                        makeNotificationBox(
+                            k,
+                            "You unlocked a new ability! \nYou can now double jump."
+                        )
+                    );
+                    k.wait(3, () => notification.close());
+                });
             },
         },
     ]);
