@@ -1,4 +1,5 @@
-import { state } from "../state/globalStateManager.js";
+import { state, statePropsEnum } from "../state/globalStateManager.js";
+import { makeBlink } from "./entitySharedLogic.js";
 
 export function makePlayer(k) {
     // create gameobject player
@@ -42,7 +43,11 @@ export function makePlayer(k) {
                             if (this.curAnim() !== "jump") this.play("jump");
                             this.doubleJump();
                         }
-                        if (key === "z" && this.curAnim() !== "attack" && this.isGrounded()) {
+                        if (
+                            key === "z" &&
+                            this.curAnim() !== "attack" &&
+                            this.isGrounded()
+                        ) {
                             this.isAttacking = true;
                             // hit box
                             this.add([
@@ -119,7 +124,11 @@ export function makePlayer(k) {
             },
 
             // player fallen off map
-            respawnIfOutOfBounds(boundValue, destinationName, previousSceneData = { exitName: null }) {
+            respawnIfOutOfBounds(
+                boundValue,
+                destinationName,
+                previousSceneData = { exitName: null }
+            ) {
                 // TODO
             },
 
@@ -136,6 +145,29 @@ export function makePlayer(k) {
                 });
                 this.onHeadbutt(() => {
                     this.play("fall");
+                });
+
+                this.on("heal", () => {
+                    state.set(statePropsEnum.playerHp, this.hp());
+                    // TODO Healthbar
+                });
+
+                // make player blink when hurt
+                this.on("hurt", () => {
+                    makeBlink(k, this);
+                    if (this.hp() > 0) {
+                        state.set(statePropsEnum.playerHp, this.hp());
+                        // TODO healthbar
+                        return;
+                    }
+                    k.play("boom");
+                    this.play("explode");
+                    state.set(statePropsEnum.playerHp, state.current().maxPlayerHp);
+                });
+                this.onAnimEnd((anim) => {
+                    if (anim === "explode") {
+                        k.go("room1");
+                    }
                 });
             },
         },
