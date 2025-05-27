@@ -94,6 +94,25 @@ export function makeBoss(k, initialPos) {
                         default:
                     }
                 });
+                this.on("explode"),
+                    () => {
+                        this.enterState("explode");
+                        this.collisionIgnore = ["player"];
+                        this.unuse("body");
+                        k.play("boom");
+                        this.play("explode");
+                        state.set(statePropsEnum.isBossDefeated, true);
+                        state.set(statePropsEnum.isDoubleJumpUnlocked, true);
+                        player.enableDoubleJump();
+                        k.play("notify");
+                        const notification = k.add(
+                            makeNotificationBox(
+                                k,
+                                "You unlocked a new ability! \nYou can now double jump."
+                            )
+                        );
+                        k.wait(3, () => notification.close());
+                    };
             },
         },
     ]);
