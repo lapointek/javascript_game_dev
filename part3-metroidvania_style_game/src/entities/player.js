@@ -164,6 +164,7 @@ export function makePlayer(k) {
                     this.play("explode");
                     state.set(statePropsEnum.playerHp, state.current().maxPlayerHp);
                 });
+                // goto room1 after all enemydrones are killed
                 this.onAnimEnd((anim) => {
                     if (anim === "explode") {
                         k.go("room1");
