@@ -1,4 +1,5 @@
 import { state, statePropsEnum } from "../state/globalStateManager.js";
+import { healthBar } from "../ui/healthBar.js";
 import { makeBlink } from "./entitySharedLogic.js";
 
 export function makePlayer(k) {
@@ -125,7 +126,11 @@ export function makePlayer(k) {
                 destinationName,
                 previousSceneData = { exitName: null }
             ) {
-                // TODO
+                k.onUpdate(() => {
+                    if (this.pos.y > boundValue) {
+                        k.go(destinationName, previousSceneData);
+                    }
+                });
             },
 
             setEvents() {
@@ -145,7 +150,7 @@ export function makePlayer(k) {
 
                 this.on("heal", () => {
                     state.set(statePropsEnum.playerHp, this.hp());
-                    // TODO Healthbar
+                    healthBar.trigger("update");
                 });
 
                 // make player blink when hurt
@@ -153,7 +158,7 @@ export function makePlayer(k) {
                     makeBlink(k, this);
                     if (this.hp() > 0) {
                         state.set(statePropsEnum.playerHp, this.hp());
-                        // TODO healthbar
+                        healthBar.trigger("update");
                         return;
                     }
                     k.play("boom");
