@@ -8,13 +8,7 @@ export function makeDrone(k, initialPos) {
         k.body({ gravityScale: 0 }),
         // reposition drone if the player is 400 units away
         k.offscreen({ distance: 400 }),
-        k.state("patrol-right", [
-            "patrol-right",
-            "patrol-left",
-            "alert",
-            "attack",
-            "retreat",
-        ]),
+        k.state("patrol-right", ["patrol-right", "patrol-left", "alert", "attack", "retreat"]),
 
         k.health(1),
         "drone",
@@ -78,10 +72,7 @@ export function makeDrone(k, initialPos) {
                     }
                     this.flipX = player.pos.x <= this.pos.x;
                     // move to player
-                    this.moveTo(
-                        k.vec2(player.pos.x, player.pos.y, +12),
-                        this.pursuitSpeed
-                    );
+                    this.moveTo(k.vec2(player.pos.x, player.pos.y, +12), this.pursuitSpeed);
                 });
             },
 

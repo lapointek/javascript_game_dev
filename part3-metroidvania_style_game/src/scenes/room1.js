@@ -1,6 +1,14 @@
+import { makeBoss } from "../entities/enemyBoss.js";
 import { makePlayer } from "../entities/player.js";
 import { makeDrone } from "../entities/enemyDrone.js";
-import { setBackgroundColor, setMapColliders, setCameraZones, setCameraControls } from "./roomUtils.js";
+import { state } from "../state/globalStateManager.js";
+
+import {
+    setBackgroundColor,
+    setMapColliders,
+    setCameraZones,
+    setCameraControls,
+} from "./roomUtils.js";
 
 export function room1(k, roomData) {
     // color background of canvas
@@ -48,11 +56,19 @@ export function room1(k, roomData) {
             player.enablePassthrough();
             continue;
         }
+
         if (position.type === "drone") {
             // add drone to map
             const drone = map.add(makeDrone(k, k.vec2(position.x, position.y)));
             drone.setBehavior();
             drone.setEvents();
+            continue;
+        }
+
+        if (position.name === "boss" && !state.current().isBossDefeated) {
+            const boss = map.add(makeBoss(k, k.vec2(position.x, position.y)));
+            boss.setBehavior();
+            boss.setEvents();
         }
     }
 }
