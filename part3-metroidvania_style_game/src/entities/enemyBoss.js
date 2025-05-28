@@ -91,11 +91,12 @@ export function makeBoss(k, initialPos) {
                             this.enterState("follow");
                             break;
                         case "explode":
-                            k.destroy("this");
+                            k.destroy(this);
                             break;
                         default:
                     }
                 });
+
                 this.on("explode", () => {
                     this.enterState("explode");
                     this.collisionIgnore = ["player"];
@@ -108,7 +109,7 @@ export function makeBoss(k, initialPos) {
                     player.enableDoubleJump();
                     // play sound
                     k.play("notify");
-                    // show notification
+                    // show notification on enemy boss defeat
                     const notification = k.add(
                         makeNotificationBox(
                             k,
