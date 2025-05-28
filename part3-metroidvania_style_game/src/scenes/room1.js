@@ -9,8 +9,10 @@ import {
     setCameraZones,
     setCameraControls,
 } from "./roomUtils.js";
+import { healthBar } from "../ui/healthBar.js";
+import { makeCartridge } from "../entities/healthCartridge.js";
 
-export function room1(k, roomData) {
+export function room1(k, roomData, previousSceneData) {
     // color background of canvas
     setBackgroundColor(k, "#a2aed5");
 
@@ -37,12 +39,18 @@ export function room1(k, roomData) {
             continue;
         }
 
+        if (layer.name === "exits") {
+            exits.push(...layer.objects);
+            continue;
+        }
+
         if (layer.name === "colliders") {
             // pushing all roomdData layers into colliders array
             colliders.push(...layer.objects);
         }
     }
 
+    // function imports from roomUtils.js
     setMapColliders(k, map, colliders);
     setCameraZones(k, map, cameras);
     const player = map.add(makePlayer(k));
@@ -54,6 +62,7 @@ export function room1(k, roomData) {
             player.setControls();
             player.setEvents();
             player.enablePassthrough();
+            player.respawnIfOutOfBounds(1000, "room1");
             continue;
         }
 
@@ -70,5 +79,13 @@ export function room1(k, roomData) {
             boss.setBehavior();
             boss.setEvents();
         }
+
+        if (position.type === "cartridge") {
+            map.add(makeCartridge(k, k.vec2(position.x, position.y)));
+        }
     }
+
+    healthBar.setEvents();
+    healthBar.trigger("update");
+    k.add(healthBar);
 }

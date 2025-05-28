@@ -5,13 +5,15 @@ import { room2 } from "./scenes/room2.js";
 async function main() {
     const room1Data = await (await fetch("./maps/room1.json")).json();
     const room2Data = await (await fetch("./maps/room2.json")).json();
+
     // scenes
-    k.scene("room1", () => {
-        room1(k, room1Data);
+    k.go("room1", {});
+    k.scene("room1", (previousSceneData) => {
+        room1(k, room1Data, previousSceneData);
     });
 
-    k.scene("room2", () => {
-        room2(k, room2Data);
+    k.scene("room2", (previousSceneData) => {
+        room2(k, room2Data, previousSceneData);
     });
 }
 
@@ -22,7 +24,7 @@ k.scene("intro", () => {
     // user input
     k.onKeyPress("enter", () => {
         // goto room1
-        k.go("room1");
+        k.go("room1", { exitName: null });
     });
 });
 

@@ -2,6 +2,7 @@ import { state } from "../state/globalStateManager.js";
 import { k } from "../kaboomLoader.js";
 
 function makeHealthBar(k) {
+    // display healthbar sprite
     return k.make([
         k.sprite("healthBar", { frame: 0 }),
         k.fixed(),
@@ -18,9 +19,7 @@ function makeHealthBar(k) {
                     const currentHp = state.current().playerHp;
                     if (currentHp === 0) {
                         k.destroy(this);
-                        return;
                     }
-                    this.frame = this.hpMapping[currentHp];
                 });
             },
         },
