@@ -19,7 +19,9 @@ function makeHealthBar(k) {
                     const currentHp = state.current().playerHp;
                     if (currentHp === 0) {
                         k.destroy(this);
+                        return;
                     }
+                    this.frame = this.hpMapping[currentHp];
                 });
             },
         },
