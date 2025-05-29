@@ -1,4 +1,3 @@
-import { setBackgroundColor } from "./roomUtils.js";
 import { makePlayer } from "../entities/player.js";
 import { makeCartridge } from "../entities/healthCartridge.js";
 import { healthBar } from "../ui/healthBar.js";
@@ -7,9 +6,10 @@ import {
     setMapColliders,
     setCameraZones,
     setCameraControls,
+    setExitZones,
 } from "./roomUtils.js";
 
-export function room2() {
+export function room2(k, roomData, previousSceneData) {
     setBackgroundColor(k, "#a2aed5");
 
     k.camScale(4);
@@ -51,14 +51,24 @@ export function room2() {
     setCameraZones(k, map, cameras);
     const player = map.add(makePlayer(k));
     setCameraControls(k, player, map, roomData);
+    setExitZones(k, map, exits, "room1");
 
     for (const position of positions) {
-        if (position.name === "player") {
+        if (position.name === "entrance-1" && previousSceneData.exitName === "exit-1") {
             player.setPosition(position.x, position.y);
             player.setControls();
-            player.setEvents();
             player.enablePassthrough();
-            player.respawnIfOutOfBounds(1000, "room1");
+            player.setEvents();
+            continue;
+        }
+
+        if (position.name === "entrance-2" && previousSceneData.exitName === "exit-2") {
+            player.setPosition(position.x + map.pos.x, position.y + map.pos.y);
+            player.setControls();
+            player.enablePassthrough();
+            player.setEvents();
+            player.respawnIfOutOfBounds(1000, "room2", { exitName: "exit-2" });
+            k.camPos(player.pos);
             continue;
         }
 

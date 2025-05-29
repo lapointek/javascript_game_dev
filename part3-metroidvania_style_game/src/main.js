@@ -7,7 +7,6 @@ async function main() {
     const room2Data = await (await fetch("./maps/room2.json")).json();
 
     // scenes
-    k.go("room1", {});
     k.scene("room1", (previousSceneData) => {
         room1(k, room1Data, previousSceneData);
     });
