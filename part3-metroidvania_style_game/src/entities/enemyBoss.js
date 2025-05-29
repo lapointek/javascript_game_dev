@@ -1,4 +1,6 @@
-import { statePropsEnum } from "../state/globalStateManager";
+import { state, statePropsEnum } from "../state/globalStateManager.js";
+import { makeNotificationBox } from "../ui/notificationBox.js";
+import { makeBlink } from "./entitySharedLogic.js";
 
 export function makeBoss(k, initialPos) {
     return k.make([
@@ -15,6 +17,7 @@ export function makeBoss(k, initialPos) {
             fireRange: 40,
             fireDuration: 1,
             setBehavior() {
+                const player = k.get("player", { recursive: true })[0];
                 this.onStateUpdate("idle", () => {
                     if (state.current().playerInBossFight) {
                         this.enterState("follow");
@@ -23,7 +26,7 @@ export function makeBoss(k, initialPos) {
                 // boss enemy following player
                 this.onStateEnter("follow", () => this.play("run"));
                 this.onStateUpdate("follow", () => {
-                    this.flipX = player.pox.x <= this.pos.x;
+                    this.flipX = player.pos.x <= this.pos.x;
                     this.moveTo(k.vec2(player.pos.x, player.pos.y), this.pursuitSpeed);
 
                     if (this.pos.dist(player.pos) < this.fireRange) {
@@ -50,8 +53,7 @@ export function makeBoss(k, initialPos) {
                     fireHitbox.onCollide("player", () => {
                         player.hurt(1);
                         // if player is dead
-                        if (player.hp() === 0)
-                            state.set(statePropsEnum.playerIsInBossFight, false);
+                        if (player.hp() === 0) state.set(statePropsEnum.playerIsInBossFight, false);
                     });
                     // stop fire sound
                     k.wait(this.fireDuration, () => {
@@ -89,30 +91,40 @@ export function makeBoss(k, initialPos) {
                             this.enterState("follow");
                             break;
                         case "explode":
-                            k.destroy("this");
+                            k.destroy(this);
                             break;
                         default:
                     }
                 });
-                this.on("explode"),
-                    () => {
-                        this.enterState("explode");
-                        this.collisionIgnore = ["player"];
-                        this.unuse("body");
-                        k.play("boom");
-                        this.play("explode");
-                        state.set(statePropsEnum.isBossDefeated, true);
-                        state.set(statePropsEnum.isDoubleJumpUnlocked, true);
-                        player.enableDoubleJump();
-                        k.play("notify");
-                        const notification = k.add(
-                            makeNotificationBox(
-                                k,
-                                "You unlocked a new ability! \nYou can now double jump."
-                            )
-                        );
-                        k.wait(3, () => notification.close());
-                    };
+
+                this.on("explode", () => {
+                    this.enterState("explode");
+                    this.collisionIgnore = ["player"];
+                    this.unuse("body");
+                    k.play("boom");
+                    this.play("explode");
+                    state.set(statePropsEnum.isBossDefeated, true);
+                    state.set(statePropsEnum.isDoubleJumpUnlocked, true);
+                    // enable double jump
+                    player.enableDoubleJump();
+                    // play sound
+                    k.play("notify");
+                    // show notification on enemy boss defeat
+                    const notification = k.add(
+                        makeNotificationBox(
+                            k,
+                            "You unlocked a new ability! \nYou can now double jump."
+                        )
+                    );
+                    // after 3 seconds close notification box
+                    k.wait(3, () => notification.close());
+                });
+
+                this.on("hurt", () => {
+                    makeBlink(k, this);
+                    if (this.hp() > 0) return;
+                    this.trigger("explode");
+                });
             },
         },
     ]);

@@ -47,7 +47,13 @@ export function setMapColliders(k, map, colliders) {
                 {
                     // make boss barrier from invisible to visible
                     activate() {
-                        k.tween(this.opacity, 0.3, 1, (val) => (this.opacity = val), k.easings.linear);
+                        k.tween(
+                            this.opacity,
+                            0.3,
+                            1,
+                            (val) => (this.opacity = val),
+                            k.easings.linear
+                        );
                         k.tween(
                             k.camPos().x,
                             collider.properties[0].value,
@@ -58,7 +64,13 @@ export function setMapColliders(k, map, colliders) {
                     },
                     // deactivate barrier dissapear
                     async deactivate(playerPosX) {
-                        k.tween(this.opacity, 0, 1, (val) => (this.opacity = val), k.easings.linear);
+                        k.tween(
+                            this.opacity,
+                            0,
+                            1,
+                            (val) => (this.opacity = val),
+                            k.easings.linear
+                        );
                         await k.tween(
                             k.camPos().x,
                             // move camera back to players position
@@ -85,7 +97,13 @@ export function setMapColliders(k, map, colliders) {
 
                 player.disableControls();
                 player.play("idle");
-                await k.tween(player.pos.x, player.pos.x + 25, 0.2, (val) => (player.pos.x = val), k.easings.linear);
+                await k.tween(
+                    player.pos.x,
+                    player.pos.x + 25,
+                    0.2,
+                    (val) => (player.pos.x = val),
+                    k.easings.linear
+                );
                 player.setControls();
             });
 
@@ -160,6 +178,42 @@ export function setCameraZones(k, map, cameras) {
                     k.easings.linear
                 );
             }
+        });
+    }
+}
+
+export function setExitZones(k, map, exits, destinationName) {
+    for (const exit of exits) {
+        const exitZone = map.add([
+            k.pos(exit.x, exit.y),
+            k.area({
+                shape: new k.Rect(k.vec2(0), exit.width, exit.height),
+                collisionIgnore: ["collider"],
+            }),
+            k.body({ isStatic: true }),
+            exit.name,
+        ]);
+        // set background transition
+        exitZone.onCollide("player", async () => {
+            const background = k.add([
+                k.pos(-k.width(), 0),
+                k.rect(k.width(), k.height()),
+                k.color("#20214a"),
+            ]);
+
+            await k.tween(
+                background.pos.x,
+                0,
+                0.3,
+                (val) => (background.pos.x = val),
+                k.easings.linear
+            );
+            // final exit scene
+            if (exit.name === "final-exit") {
+                k.go("final-exit");
+                return;
+            }
+            k.go(destinationName, { exitName: exit.name });
         });
     }
 }
